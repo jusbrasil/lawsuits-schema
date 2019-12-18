@@ -1,0 +1,534 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema documentation for </title>
+      <link rel="stylesheet" href="docHtml.css" type="text/css" /><script type="text/javascript">
+         <!--
+        
+      
+        var button_prefix = 'button_';
+        
+        /**
+        * Returns an element in the current HTML document.
+        *
+        * @param elementID Identifier of HTML element
+        * @return               HTML element object
+        */
+        function getElementObject(elementID) {
+            var elemObj = null;
+            if (document.getElementById) {
+                elemObj = document.getElementById(elementID);
+            }
+            return elemObj;
+        }
+        
+        /**
+        * Switches the state of a collapseable box, e.g.
+        * if it's opened, it'll be closed, and vice versa.
+        *
+        * @param boxID Identifier of box
+        */
+        function switchState(boxID) {
+            var boxObj = getElementObject(boxID);
+            var buttonObj = getElementObject(button_prefix + boxID);
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else if (boxObj.style.display == "none") {
+                // Box is closed, so open it
+                openBox(boxObj, buttonObj);
+            } else if (boxObj.style.display == "block") {
+                // Box is opened, so close it
+                closeBox(boxObj, buttonObj);
+            }
+        }
+        
+        /**
+        * Opens a collapseable box.
+        *
+        * @param boxObj       Collapseable box
+        * @param buttonObj Button controlling box
+        */
+        function openBox(boxObj, buttonObj) {
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else {
+                // Change 'display' CSS property of box
+                boxObj.style.display = "block";
+                
+                // Change text of button
+                if (boxObj.style.display == "block") {
+                    buttonObj.src = "img/btM.gif";
+                }
+            }
+        }
+        
+        /**
+        * Closes a collapseable box.
+        *
+        * @param boxObj       Collapseable box
+        * @param buttonObj Button controlling box
+        */
+        function closeBox(boxObj, buttonObj) {
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else {
+                // Change 'display' CSS property of box
+                boxObj.style.display = "none";
+                
+                // Change text of button
+                if (boxObj.style.display == "none") {
+                    buttonObj.src = "img/btP.gif";
+                }
+            }
+        }
+    
+       function switchStateForAll(buttonObj, boxList) {
+            if (buttonObj == null) {
+                // button not found
+            } else if (buttonObj.value == "+") {
+                // Expand all
+                expandAll(boxList);
+                buttonObj.value = "-";
+            } else if (buttonObj.value == "-") {
+                // Collapse all
+                collapseAll(boxList);
+                buttonObj.value = "+";
+            }
+        }
+        
+        /**
+        * Closes all boxes in a given list.
+        *
+        * @param boxList Array of box IDs
+        */
+        function collapseAll(boxList) {
+            var idx;
+            for (idx = 0; idx < boxList.length; idx++) {
+                var boxObj = getElementObject(boxList[idx]);
+                var buttonObj = getElementObject(button_prefix + boxList[idx]);
+                closeBox(boxObj, buttonObj);
+            }
+        }
+            
+        /**
+        * Open all boxes in a given list.
+        *
+        * @param boxList Array of box IDs
+        */
+        function expandAll(boxList) {
+            var idx;
+            for (idx = 0; idx < boxList.length; idx++) {
+                var boxObj = getElementObject(boxList[idx]);
+                var buttonObj = getElementObject(button_prefix + boxList[idx]);
+                openBox(boxObj, buttonObj);
+            }
+        }
+        
+        /**
+         * Update the message presented in the title of the html page.
+         * - If the documentation was splited by namespace we present something like: "Documentation for namespace 'ns'"
+         * - If the documentation was splited by location we present somehing like: "Documentation for 'Schema.xsd'"
+         * - If no split we always present: "Documentation for 'MainSchema.xsd'"
+         */
+        function updatePageTitle(message) {
+            top.document.title = message;
+        }
+        
+          
+                    
+         /**
+          * Finds an HTML element by its ID and makes it floatable over the normal content.
+          *
+          * @param x_displacement The difference in pixels to the right side of the window from 
+          *           the left side of the element.
+          * @param y_displacement The difference in pixels to the right side of the window from 
+          *           the top of the element.          
+          */
+         function findAndFloat(id, x_displacement, y_displacement){
+
+            var element = getElementObject(id);            
+            
+            window[id + "_obj"] = element;
+            
+            if(document.layers) {
+               element.style = element;
+            }
+            
+            element.current_y = y_displacement;      
+            element.first_time = true;
+         
+            element.floatElement = function(){
+               // It may be closed by an user action.
+                
+               // Target X and Y coordinates.
+               var x, y;
+               
+               var myWidth = 0, myHeight = 0;
+               if( typeof( window.innerWidth ) == 'number' ) {
+                  //Non-IE
+                  myWidth = window.innerWidth;
+                  myHeight = window.innerHeight;
+               } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+                  //IE 6+ in 'standards compliant mode'
+                  myWidth = document.documentElement.clientWidth;
+                  myHeight = document.documentElement.clientHeight;
+               } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+                  //IE 4 compatible
+                  myWidth = document.body.clientWidth;
+                  myHeight = document.body.clientHeight;
+               }
+               
+               
+               x = myWidth - x_displacement;
+               
+               var ns = (navigator.appName.indexOf("Netscape") != -1);               
+               y = ns ? pageYOffset : document.documentElement && document.documentElement.scrollTop ? 
+                  document.documentElement.scrollTop : document.body.scrollTop;               
+               y = y + y_displacement;               
+               
+               // The current y is the current coordinate of the floating element.
+               // This should be at the limit the y target coordinate.
+               this.current_y += (y - this.current_y)/1.25;
+               
+               // Add the pixels constant after the values
+               // and move the element.
+               var px = document.layers ? "" : "px";
+               this.style.left =  x + px;
+               this.style.top =  this.current_y + px;
+                              
+               setTimeout(this.id + "_obj.floatElement()", 100);
+            }
+            
+            element.floatElement();
+            return element;
+          }
+
+         /**
+          * Finds an HTML element by its ID and makes it floatable over the normal content.
+          *
+          * @param x_displacement The difference in pixels to the right side of the window from 
+          *           the left side of the element.
+          * @param y_displacement The difference in pixels to the right side of the window from 
+          *           the top of the element.          
+          */
+         function selectTOCGroupBy(id, isChunked, indexFileLocation, indexFileNamespace, indexFileComponent){
+
+            if (!isChunked) {
+             var selectIds = new Array('toc_group_by_namespace', 'toc_group_by_location', 'toc_group_by_component_type');
+             // Make all the tabs invisible.
+               for (i = 0; i < 3; i++){
+                  var tab = getElementObject(selectIds[i]);
+                  tab.style.display = 'none';
+               }
+               var selTab = getElementObject(id);
+               selTab.style.display = 'block';
+            } else {
+             if (id == 'toc_group_by_namespace') {
+               parent.indexFrame.location = indexFileNamespace;
+             } else  if (id == 'toc_group_by_location') {
+               parent.indexFrame.location = indexFileLocation;
+             } else  if (id == 'toc_group_by_component_type') {
+              parent.indexFrame.location = indexFileComponent;
+             }
+            }
+         }
+          
+
+    
+                        //--></script></head>
+   <body>
+      <h2><a id="INDEX">Table of Contents</a></h2>
+      <div class="toc">
+         <form action="none">
+            <div><span> Group by: <select id="selectTOC" onchange="selectTOCGroupBy(this.options[this.selectedIndex].value, true, 'BipBop_ProcessoJudicial_Template_XSD.indexList.html', 'BipBop_ProcessoJudicial_Template_XSD.indexListns.html', 'BipBop_ProcessoJudicial_Template_XSD.indexListcomp.html');">
+                     <option value="toc_group_by_namespace" selected="selected">Namespace</option>
+                     <option value="toc_group_by_location">Location</option>
+                     <option value="toc_group_by_component_type">Component Type</option></select></span></div>
+         </form>
+         <div class="level1" id="toc_group_by_namespace" style="display:block">
+            <div>
+               <div class="level2">
+                  <p><input id="button_boxIdNamespace1" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1');" class="control" /><span class="indexGroupTitle">No namespace</span></p>
+                  <div id="boxIdNamespace1" style="display:block">
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Main_schema" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Main_schema');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Main Schema</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Main_schema" class="componentGroup" style="display:block">
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#BipBop_ProcessoJudicial_Template_XSD.xsd" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">BipBop_ProcessoJudicial_Template_XSD.xsd</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Element" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Element');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Elements</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Element" class="componentGroup" style="display:block">
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#BPQL" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">BPQL</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#acao" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">acao</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#advogado" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">advogado</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#advogados" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">advogados</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#andamento" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">andamento</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#andamentos" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">andamentos</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#area" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">area</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#assunto" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">assunto</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#autuacao" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">autuacao</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#body" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">body</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#cartorio" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">cartorio</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#classe" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">classe</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#codigoNacional" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">codigoNacional</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#codigo_interno" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">codigo_interno</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#comarca" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">comarca</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#custas" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">custas</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#data" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">data</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#date-time" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">date-time</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#descricao" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">descricao</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#description" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">description</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#distribuicao" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">distribuicao</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#documento" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">documento</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#documentos" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">documentos</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#eletronico" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">eletronico</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#execution-time" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">execution-time</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#fase" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">fase</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#foro" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">foro</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#header" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">header</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#incidente" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">incidente</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#inscricao" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">inscricao</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#instancia" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">instancia</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#juizo" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">juizo</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#julgador" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">julgador</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#localizacao" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">localizacao</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#nextAppointment" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">nextAppointment</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#numero_andamento" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">numero_andamento</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#numero_antigo" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">numero_antigo</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#numero_processo" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">numero_processo</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#numero_protocolo" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">numero_protocolo</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#observacao" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">observacao</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#ordenacao" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">ordenacao</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#orgao" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">orgao</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#origem_processo" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">origem_processo</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#origem_tribunal" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">origem_tribunal</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#outros_numeros" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">outros_numeros</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#parte" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">parte</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#partes" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">partes</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#prioridade" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">prioridade</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#query" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">query</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#rito" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">rito</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#situacao" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">situacao</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#solucao" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">solucao</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#status" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">status</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#tag" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">tag</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#tags" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">tags</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#tipo" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">tipo</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#tipo_andamento" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">tipo_andamento</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#tipo_incidente" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">tipo_incidente</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#url_documento" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">url_documento</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#url_processo" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">url_processo</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#usuario_juntada" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">usuario_juntada</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#validRequest" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">validRequest</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#valor_causa" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">valor_causa</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#vara" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">vara</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Simple_Type" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Simple_Type');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Simple Types</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Simple_Type" class="componentGroup" style="display:block">
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#dateTime_br" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">dateTime_br</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#date_br" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">date_br</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#float_br" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">float_br</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Attribute" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Attribute');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Attributes</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Attribute" class="componentGroup" style="display:block">
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#advogado_OAB" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">advogado/@OAB</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#advogado_documento" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">advogado/@documento</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#advogado_parte" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">advogado/@parte</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#autuacao_format" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">autuacao/@format</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#classe_sigla" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">classe/@sigla</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#data_format" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">data/@format</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#data_hash" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">data/@hash</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#distribuicao_format" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">distribuicao/@format</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#header_resourceUse" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">header/@resourceUse</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#header_specialResourceUse" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">header/@specialResourceUse</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#inscricao_format" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">inscricao/@format</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#julgador_tipo" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">julgador/@tipo</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#nextAppointment_hour" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">nextAppointment/@hour</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#nextAppointment_minute" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">nextAppointment/@minute</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#parte_documento" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">parte/@documento</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#parte_endereco" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">parte/@endereco</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#parte_tipo" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">parte/@tipo</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_databaseDescription" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@databaseDescription</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_databaseName" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@databaseName</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_databaseUrl" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@databaseUrl</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_filter" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@filter</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_id" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@id</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_instancia" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@instancia</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_origin" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@origin</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_pushguid" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@pushguid</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_tableDescription" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@tableDescription</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_tableName" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@tableName</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_tableType" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@tableType</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_tableUpload" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@tableUpload</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#processo_tableUrl" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">processo/@tableUrl</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#query_database" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">query/@database</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#query_table" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">query/@table</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#tag_data" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">tag/@data</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#tag_tipo" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">tag/@tipo</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#valor_causa_unidade_monetaria" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">valor_causa/@unidade_monetaria</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#vara_codigo" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">vara/@codigo</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#vara_sigla" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">vara/@sigla</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning_code" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning/@code</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning_databaseDescription" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning/@databaseDescription</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning_databaseName" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning/@databaseName</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning_databaseUrl" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning/@databaseUrl</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning_push" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning/@push</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning_query" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning/@query</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning_source" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning/@source</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning_tableDescription" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning/@tableDescription</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning_tableName" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning/@tableName</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning_tableType" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning/@tableType</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning_tableUpload" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning/@tableUpload</a></b></div>
+                                                <div><b><a href="BipBop_ProcessoJudicial_Template_XSD_xsd.html#warning_tableUrl" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for BipBop_ProcessoJudicial_Template_XSD.xsd')">warning/@tableUrl</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div style="clear:left"></div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="footer">
+         <hr />
+         <div align="center">Desenvolvido por<br><a href="http://shiftinc.com.br" target="_blank"><img class="logo" src="img/logo.png"></a>
+         </div>
+      </div>
+   </body>
+</html>

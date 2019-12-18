@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+   <!-- BPQL: estrutura do documento -->
+   <xs:element name="BPQL">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element ref="header" />
+            <xs:element ref="body" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- header: cabeçalho do documento -->
+   <xs:element name="header">
+      <xs:annotation>
+         <xs:documentation xml:lang="PT">Cabeçalho do documento</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element ref="date-time" />
+            <xs:element minOccurs="0" ref="description" />
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+               <xs:element ref="nextAppointment" />
+               <xs:element ref="validRequest" />
+               <xs:element ref="warning" />
+            </xs:choice>
+            <xs:element ref="execution-time" />
+            <xs:element ref="query" />
+         </xs:sequence>
+         <xs:attribute name="resourceUse" use="required" type="xs:integer" />
+         <xs:attribute name="specialResourceUse" use="required" type="xs:integer" />
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="date-time" type="dateTime_br">
+      <xs:annotation>
+         <xs:documentation xml:lang="PT">Data do response</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="description" type="xs:string" />
+   <xs:element name="nextAppointment">
+      <xs:complexType>
+         <xs:attribute name="hour" use="required" type="xs:integer" />
+         <xs:attribute name="minute" use="required" type="xs:integer" />
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="validRequest" type="xs:string">
+      <xs:annotation>
+         <xs:documentation xml:lang="PT">Database/Table aonde foi encontrado uma request válida.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="warning">
+      <xs:annotation>
+         <xs:documentation xml:lang="PT">Response para request’s inválidas para consultas CNJ. Como a consulta bate em todos os tribunais que seguem àquela esfera, as warnings servem como validador para as tabelas.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType mixed="true">
+         <xs:attribute name="code" use="required" type="xs:integer" />
+         <xs:attribute name="databaseDescription" type="xs:string" />
+         <xs:attribute name="databaseName" type="xs:string" />
+         <xs:attribute name="databaseUrl" type="xs:string" />
+         <xs:attribute name="push" type="xs:boolean" />
+         <xs:attribute name="query" type="xs:string" />
+         <xs:attribute name="source" use="required" type="xs:string" />
+         <xs:attribute name="tableDescription" type="xs:string" />
+         <xs:attribute name="tableName" type="xs:string" />
+         <xs:attribute name="tableType" type="xs:string" />
+         <xs:attribute name="tableUpload" type="xs:boolean" />
+         <xs:attribute name="tableUrl" type="xs:string" />
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="execution-time" type="xs:integer" />
+   <xs:element name="query">
+      <xs:complexType>
+         <xs:simpleContent>
+            <xs:extension base="xs:string">
+               <xs:attribute name="database" use="required" type="xs:string" />
+               <xs:attribute name="table" use="required" type="xs:string" />
+            </xs:extension>
+         </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <!-- body: corpo do documento -->
+   <xs:element name="body">
+      <xs:annotation>
+         <xs:documentation xml:lang="PT">Corpo do documento.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="processo" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="processo">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#processo" xml:lang="PT">É o instrumento que possibilita a satisfação do interesse público na conciliação de litígios (conflitos). O processo judicial é uma relação triangular formada por três partes: autor, réu e juiz; já o processo administrativo é uma relação bilateral formada pelo Interessado e Órgão público.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:choice maxOccurs="unbounded">
+            <xs:element ref="acao" />
+            <xs:element ref="autuacao" />
+            <xs:element ref="classe" />
+            <xs:element ref="descricao" />
+            <xs:element ref="distribuicao" />
+            <xs:element ref="instancia" />
+            <xs:element ref="advogados" />
+            <xs:element ref="andamentos" />
+            <xs:element ref="area" />
+            <xs:element ref="assunto" />
+            <xs:element ref="cartorio" />
+            <xs:element ref="codigo_interno" />
+            <xs:element ref="comarca" />
+            <xs:element ref="custas" />
+            <xs:element ref="documentos" />
+            <xs:element ref="eletronico" />
+            <xs:element ref="fase" />
+            <xs:element ref="foro" />
+            <xs:element ref="incidente" />
+            <xs:element ref="inscricao" />
+            <xs:element ref="juizo" />
+            <xs:element ref="julgador" />
+            <xs:element ref="localizacao" />
+            <xs:element ref="numero_antigo" />
+            <xs:element ref="numero_processo" />
+            <xs:element ref="numero_protocolo" />
+            <xs:element ref="observacao" />
+            <xs:element ref="orgao" />
+            <xs:element ref="origem_processo" />
+            <xs:element minOccurs="0" ref="origem_tribunal" />
+            <xs:element ref="outros_numeros" />
+            <xs:element ref="partes" />
+            <xs:element ref="prioridade" />
+            <xs:element ref="rito" />
+            <xs:element ref="situacao" />
+            <xs:element ref="solucao" />
+            <xs:element ref="status" />
+            <xs:element ref="tags" />
+            <xs:element ref="url_processo" />
+            <xs:element ref="valor_causa" />
+            <xs:element ref="vara" />
+         </xs:choice>
+         <xs:attribute name="databaseDescription" type="xs:string">
+            <xs:annotation>
+               <xs:documentation xml:lang="PT">Sigla e nome do tribunal (do database).</xs:documentation>
+            </xs:annotation>
+         </xs:attribute>
+         <xs:attribute name="databaseName" type="xs:string">
+            <xs:annotation>
+               <xs:documentation xml:lang="PT">Sigla do tribunal (do database).</xs:documentation>
+            </xs:annotation>
+         </xs:attribute>
+         <xs:attribute name="databaseUrl" type="xs:string">
+            <xs:annotation>
+               <xs:documentation xml:lang="PT">Url do tribubal (do database).</xs:documentation>
+            </xs:annotation>
+         </xs:attribute>
+         <xs:attribute name="filter" use="required" type="xs:string" />
+         <xs:attribute name="id" use="required" type="xs:string" />
+         <xs:attribute name="instancia" type="xs:integer">
+            <xs:annotation>
+               <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#instancias" xml:lang="PT">O termo “instância” corresponde ao grau de jurisdição. Os juízes de órgãos de 1ª instância são os que primeiro estabelecem contato com as partes, geralmente nas varas e juizados. É direito da parte discordar da sentença recebida em 1ª instância e recorrer à 2ª instância, ou 2º grau de jurisdição, onde seu processo será analisado, em geral, por desembargadores. Ainda é possível recorrer a uma instância superior, que são os tribunais superiores – Supremo Tribunal Federal (STF), Superior Tribunal de Justiça (STJ), Tribunal Superior do Trabalho (TST), Superior Tribunal Militar (STM) ou Tribunal Superior Eleitoral (TSE). Os processos que envolvem matérias constitucionais serão analisados no STF.</xs:documentation>
+            </xs:annotation>
+         </xs:attribute>
+         <xs:attribute name="origin" type="xs:string" />
+         <xs:attribute name="pushguid" use="required" type="xs:string" />
+         <xs:attribute name="tableDescription" type="xs:string" />
+         <xs:attribute name="tableName" type="xs:string" />
+         <xs:attribute name="tableType" type="xs:string" />
+         <xs:attribute name="tableUpload" type="xs:boolean" />
+         <xs:attribute name="tableUrl" type="xs:string" />
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="advogados">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#advogados" xml:lang="PT">Os advogados(as), representantes legais das partes do processo.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="advogado" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="advogado">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#advogados" xml:lang="PT">O advogado é o representante legal das partes do processo.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:simpleContent>
+            <xs:extension base="xs:string">
+               <xs:attribute name="OAB" type="xs:string">
+                  <xs:annotation>
+                     <xs:documentation xml:lang="PT">Número de inscrição na Ordem dos Advogados do Brasil (OAB).</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+               <xs:attribute name="documento" type="xs:string" />
+               <xs:attribute name="parte" type="xs:string">
+                  <xs:annotation>
+                     <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#partes" xml:lang="PT">Participante do processo.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="andamentos">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#andamentos" xml:lang="PT">Dentro desta tag contém os andamentos, separado pela tag andamento. Serve como chave geral para todos os andamentos, organizados dentro da subtag andamento.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="andamento" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="andamento">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#andamentos" xml:lang="PT">Subtag que contém os desdobramentos processuais. Possui um campo de descrição, com o desdobramento em si, e outro chamado Data Hash, um identificador composto pela data e o primeiro desdobramento informado pelo tribunal. A data segue o formato "d/m/Y".</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element ref="descricao" />
+            <xs:element ref="data" />
+            <xs:element minOccurs="0" ref="usuario_juntada" />
+            <xs:choice minOccurs="0">
+               <xs:element ref="tipo" />
+               <xs:element ref="tipo_incidente" />
+            </xs:choice>
+            <xs:element minOccurs="0" ref="tipo_andamento" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="url_documento" />
+            <xs:element minOccurs="0" ref="numero_andamento" />
+            <xs:choice minOccurs="0">
+               <xs:element ref="codigoNacional" />
+               <xs:element ref="ordenacao" />
+            </xs:choice>
+            <xs:choice minOccurs="0">
+               <xs:element ref="acao" />
+               <xs:element ref="instancia" />
+            </xs:choice>
+            <xs:element minOccurs="0" ref="classe" />
+            <xs:choice minOccurs="0">
+               <xs:element ref="autuacao" />
+               <xs:element ref="distribuicao" />
+            </xs:choice>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="usuario_juntada" type="xs:string" />
+   <xs:element name="tipo" type="xs:string" />
+   <xs:element name="tipo_incidente" type="xs:string" />
+   <xs:element name="tipo_andamento" type="xs:string" />
+   <xs:element name="url_documento" type="xs:string" />
+   <xs:element name="numero_andamento" type="xs:integer" />
+   <xs:element name="codigoNacional" type="xs:integer" />
+   <xs:element name="ordenacao" type="xs:integer" />
+   <xs:element name="area" type="xs:string">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#area" xml:lang="PT">Âmbito/ramo do direito.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="assunto" type="xs:string">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#assunto" xml:lang="PT">Matéria do processo.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="cartorio" type="xs:string" />
+   <xs:element name="codigo_interno" type="xs:string" />
+   <xs:element name="comarca" type="xs:string">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#comarcas" xml:lang="PT">A comarca corresponde ao território em que o juiz de 1ª grau irá exercer sua jurisdição e pode abranger um ou mais municípios, dependendo do número de habitantes e de eleitores, do movimento forense e da extensão territorial dos municípios do estado, entre outros aspectos. Cada comarca, portanto, pode contar com vários juízes ou apenas um, que terá, no caso, todas as competências destinadas ao órgão de 1º grau.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="custas" type="xs:string">
+      <xs:annotation>
+         <xs:documentation source="https://pt.m.wikipedia.org/wiki/Custas_processuais" xml:lang="PT">Custas processuais são a soma das despesas decorrentes da tramitação de um processo[1]. Representam a taxa devida pela prestação, por parte do Poder Judiciário, do serviço público de julgamento de uma ação ou um recurso.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="documentos">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="documento" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="documento">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element ref="descricao" />
+            <xs:element ref="data" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="eletronico" type="xs:integer" />
+   <xs:element name="fase" type="xs:string">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#fase" xml:lang="PT">Momento processual. Existem duas essenciais de conhecimento (fase decisória) e de execução (cumprimento de sentença).</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="foro" type="xs:string">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#foro" xml:lang="PT">Espaço físico que tem a competência para julgar o processo, onde funcionam os órgãos do Poder Judiciário.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="incidente" type="xs:string" />
+   <xs:element name="inscricao">
+      <xs:complexType>
+         <xs:simpleContent>
+            <xs:extension base="date_br">
+               <xs:attribute name="format" use="required" type="xs:string" />
+            </xs:extension>
+         </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="juizo" type="xs:string" />
+   <xs:element name="julgador">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#juiz" xml:lang="PT">Campos dedicado à aboardar informações de Juízes, Relatores, Desembargadores.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:simpleContent>
+            <xs:extension base="xs:string">
+               <xs:attribute name="tipo" use="required" type="xs:string" />
+            </xs:extension>
+         </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="localizacao" type="xs:string" />
+   <xs:element name="numero_antigo" type="xs:string">
+      <xs:annotation>
+         <xs:documentation xml:lang="PT">Número antigo do processo judicial.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="numero_processo" type="xs:string">
+      <xs:annotation>
+         <xs:documentation xml:lang="PT">Número do processo judicial.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="numero_protocolo" type="xs:integer" />
+   <xs:element name="observacao" type="xs:string">
+      <xs:annotation>
+         <xs:documentation xml:lang="PT">Campo dedicado  informações adicionais que o tribunal fornece. Varia de tribunal para tribunal, sendo preenchido por controles internos do tribunal, partes e outras métricas.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="orgao" type="xs:string">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#orgao" xml:lang="PT">Juízo/julgador do sistema judiciário.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="origem_processo" type="xs:string" />
+   <xs:element name="origem_tribunal" type="xs:string">
+      <xs:annotation>
+         <xs:documentation xml:lang="PT">Sigla do tribunal de origem.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="outros_numeros" type="xs:string" />
+   <xs:element name="partes">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#partes" xml:lang="PT">Seguindo mesmo formato de andamentos, é a tag mãe que comporta todas as tags parte.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="parte" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="parte">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#partes" xml:lang="PT">Tag que possui as partes do processo. A nomenclatura dos participantes pode variar de tribunal para tribunal, desde Requerente/Requerido, até Impetrante/Impetrado.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:simpleContent>
+            <xs:extension base="xs:string">
+               <xs:attribute name="documento" type="xs:string" />
+               <xs:attribute name="endereco" type="xs:string" />
+               <xs:attribute name="tipo" type="xs:string" use="required" />
+            </xs:extension>
+         </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="prioridade" type="xs:string" />
+   <xs:element name="rito" type="xs:string" />
+   <xs:element name="situacao" type="xs:string">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#situacao" xml:lang="PT">Informação sobre o status do processo/como se encontra. Pode ser em andamento, baixado, ativo, entre outros.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="solucao" type="xs:string" />
+   <xs:element name="status" type="xs:string" />
+   <xs:element name="tags">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element ref="tag" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="tag">
+      <xs:complexType>
+         <xs:simpleContent>
+            <xs:extension base="xs:string">
+               <xs:attribute name="data" type="dateTime_br" />
+               <xs:attribute name="tipo" use="required" type="xs:string" />
+            </xs:extension>
+         </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="url_processo" type="xs:string" />
+   <xs:element name="valor_causa">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#valor-da-causa" xml:lang="PT">Valor da ação em pecúnia.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:simpleContent>
+            <xs:extension base="xs:string">
+               <xs:attribute name="unidade_monetaria" type="xs:string" />
+            </xs:extension>
+         </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="vara">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#varas" xml:lang="PT">A vara judiciária é o local ou repartição que corresponde à lotação de um juiz, onde o magistrado efetua suas atividades. Em comarcas pequenas, a única vara recebe todos os assuntos relativos à Justiça.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:simpleContent>
+            <xs:extension base="xs:string">
+               <xs:attribute name="codigo" type="xs:string" />
+               <xs:attribute name="sigla" type="xs:string" />
+            </xs:extension>
+         </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="autuacao">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#autuacao" xml:lang="PT">Pode significar duas coisas; 1 - primeiro ato de documentação do processo. 2 – Auto de infração promovido contra alguém. Possui o formato "d/m/Y".</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:simpleContent>
+            <xs:extension base="date_br">
+               <xs:attribute name="format" type="xs:string" />
+            </xs:extension>
+         </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="distribuicao">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#distribuicao" xml:lang="PT">Data em que são cadastrados os dados do processo e é designado o juízo que será incumbido de tal processo.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:simpleContent>
+            <xs:extension base="date_br">
+               <xs:attribute name="format" type="xs:string" />
+            </xs:extension>
+         </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="descricao" type="xs:string" />
+   <xs:element name="data">
+      <xs:complexType>
+         <xs:simpleContent>
+            <xs:extension base="dateTime_br">
+               <xs:attribute name="format" use="required" type="xs:string" />
+               <xs:attribute name="hash" type="xs:string" />
+            </xs:extension>
+         </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="acao" type="xs:string" />
+   <xs:element name="instancia" type="xs:integer">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#instancias" xml:lang="PT">O termo “instância” corresponde ao grau de jurisdição. Os juízes de órgãos de 1ª instância são os que primeiro estabelecem contato com as partes, geralmente nas varas e juizados. É direito da parte discordar da sentença recebida em 1ª instância e recorrer à 2ª instância, ou 2º grau de jurisdição, onde seu processo será analisado, em geral, por desembargadores. Ainda é possível recorrer a uma instância superior, que são os tribunais superiores – Supremo Tribunal Federal (STF), Superior Tribunal de Justiça (STJ), Tribunal Superior do Trabalho (TST), Superior Tribunal Militar (STM) ou Tribunal Superior Eleitoral (TSE). Os processos que envolvem matérias constitucionais serão analisados no STF.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="classe">
+      <xs:annotation>
+         <xs:documentation source="https://github.com/bipbop/ubiquitous-language-tribunais#classe" xml:lang="PT">Procedimento processual, pode ser identificado como classe/fase/recurso, uma vez que alguns tribunais usam para identificar o momento processual-recurso.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:simpleContent>
+            <xs:extension base="xs:string">
+               <xs:attribute name="sigla" type="xs:string" />
+            </xs:extension>
+         </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <!-- Validações -->
+   <xs:simpleType name="date_br">
+      <xs:annotation>
+         <xs:documentation source="http://www.shiftinc.com.br/" xml:lang="PT">Tipo de dado customizado para suportar valor data no formato "dd/mm/yyyy"</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <!-- Suporta valor data no formato "dd/mm/yyyy" -->
+         <xs:pattern value="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/([12][0-9]{3})" />
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="dateTime_br">
+      <xs:annotation>
+         <xs:documentation source="http://www.shiftinc.com.br/" xml:lang="PT">Tipo de dado customizado para suportar valor data/hora no formato "dd/mm/yyyy hh:mm:ss"</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <!-- Suporta valor data/hora no formato "dd/mm/yyyy hh:mm:ss" -->
+         <xs:pattern value="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/([12][0-9]{3})(\s+(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]))?" />
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="float_br">
+      <xs:annotation>
+         <xs:documentation source="http://www.shiftinc.com.br/" xml:lang="PT">Tipo de dado customizado para suportar valor float no formato "0.000,00"</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <!-- Suporta valor float no formato "0.000,00" -->
+         <xs:pattern value="(\d+\.)*\d+,\d+|(\d+,)*\d+\.\d+" />
+      </xs:restriction>
+   </xs:simpleType>
+</xs:schema>
