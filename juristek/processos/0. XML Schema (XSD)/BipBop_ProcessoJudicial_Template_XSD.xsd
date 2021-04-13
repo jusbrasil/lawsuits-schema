@@ -135,6 +135,7 @@
             <xs:element ref="url_processo" />
             <xs:element ref="valor_causa" />
             <xs:element ref="vara" />
+            <xs:element ref="tipo_recurso" />
          </xs:choice>
          <xs:attribute name="databaseDescription" type="xs:string">
             <xs:annotation>
@@ -478,6 +479,7 @@
          </xs:simpleContent>
       </xs:complexType>
    </xs:element>
+   <xs:element name="tipo_recurso" type="xs:string" />
    <!-- Validações -->
    <xs:simpleType name="date_br">
       <xs:annotation>
