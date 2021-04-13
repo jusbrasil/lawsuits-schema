@@ -479,6 +479,7 @@
          </xs:simpleContent>
       </xs:complexType>
    </xs:element>
+   <xs:element name="tipo_recurso" type="xs:string" />
    <!-- Validações -->
    <xs:simpleType name="date_br">
       <xs:annotation>
