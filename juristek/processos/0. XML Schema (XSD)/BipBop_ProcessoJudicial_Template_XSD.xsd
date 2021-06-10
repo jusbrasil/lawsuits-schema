@@ -282,6 +282,33 @@
    <xs:element name="documento">
       <xs:complexType>
          <xs:sequence>
+            <xs:element name="documentos_comprimidos">
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="documento_comprimido" maxOccurs="unbounded" minOccurs="0">
+                        <xs:complexType>
+                        <xs:sequence>
+                           <xs:element name="data">
+                              <xs:complexType>
+                              <xs:simpleContent>
+                                 <xs:extension base="xs:string">
+                                    <xs:attribute type="xs:string" name="format" use="optional"/>
+                                    <xs:attribute type="xs:string" name="raw-format" use="optional"/>
+                                    <xs:attribute type="xs:string" name="raw-value" use="optional"/>
+                                 </xs:extension>
+                              </xs:simpleContent>
+                              </xs:complexType>
+                           </xs:element>
+                           <xs:element type="xs:string" name="titulo"/>
+                           <xs:element type="xs:string" name="caminho"/>
+                           <xs:element type="xs:integer" name="paginacao_inicio"/>
+                           <xs:element type="xs:integer" name="paginacao_fim"/>
+                        </xs:sequence>
+                        </xs:complexType>
+                     </xs:element>
+                  </xs:sequence>
+               </xs:complexType>
+            </xs:element>
             <xs:element ref="descricao" />
             <xs:element ref="data" />
          </xs:sequence>
