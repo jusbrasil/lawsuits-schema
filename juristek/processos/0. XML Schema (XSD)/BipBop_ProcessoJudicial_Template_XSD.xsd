@@ -104,6 +104,7 @@
             <xs:element ref="andamentos" />
             <xs:element ref="area" />
             <xs:element ref="assunto" />
+            <xs:element ref="assuntos" />
             <xs:element ref="cartorio" />
             <xs:element ref="codigo_interno" />
             <xs:element ref="comarca" />
@@ -198,6 +199,16 @@
                </xs:attribute>
             </xs:extension>
          </xs:simpleContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="assuntos">
+      <xs:annotation>
+         <xs:documentation xml:lang="PT">Dentro desta tag contém os assuntos, separado pela tag assunto.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="assunto" />
+         </xs:sequence>
       </xs:complexType>
    </xs:element>
    <xs:element name="andamentos">
